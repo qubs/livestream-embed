@@ -17,7 +17,7 @@
                 elErrorMessage.innerText = err;
             }
 
-            const stream = window.location.hash;
+            const stream = window.location.hash ? window.location.hash.split("#")[1] : "";
             if (!stream) {
                 handleError("No stream specified.");
                 return;
@@ -37,7 +37,7 @@
     <title>QUBS Live Stream</title>
 </head>
 <body style="margin: 0; padding: 0; background: black;">
-<span id="error-message" style="color: white; background: black; position: absolute;"></span>
+<span id="error-message" style="color: white; background: black; position: absolute; z-index: 1000; top: 1em;"></span>
 <video id="live-stream" style="width: 100vw; height: 100vh;" controls></video>
 </body>
 </html>
