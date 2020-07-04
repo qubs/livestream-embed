@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/shaka-player/3.0.1/controls.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/shaka-player/3.0.1/shaka-player.ui.js" defer></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            const elErrorMessage = document.getElementById("error-message");
+            const elLiveStream = document.getElementById("live-stream");
+
+            function handleError(err) {
+                console.error(err);
+                elErrorMessage.innerText = err;
+            }
+
+            const stream = window.location.hash;
+            if (!stream) {
+                handleError("No stream specified.");
+                return;
+            }
+
+            shaka.Player.probeSupport().then(function (support) {
+                 if (support["manifest"]["application/dash+xml"]) {
+                     const pl = new shaka.Player(elLiveStream);
+                     pl.load("https://video.qubs.ca/dash/" + stream + ".mpd").catch(handleError);
+                 } else {
+                     elLiveStream.src = "https://video.qubs.ca/hls/" + stream + ".m3u8";
+                 }
+            });
+        });
+    </script>
+
+    <title>QUBS Live Stream</title>
+</head>
+<body>
+<span id="error-message"></span>
+<video id="live-stream" style="width: 100%; height: auto;" controls></video>
+</body>
+</html>
